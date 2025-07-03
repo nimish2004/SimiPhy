@@ -1,18 +1,18 @@
-// src/components/Navbar.jsx
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext"; // ✅
+import { useCart } from "../context/CartContext";
 
-const Navbar = () => {
+const Navbar = ({ onSearchChange }) => {
   const { cart } = useCart();
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <nav className="bg-white shadow-md p-4 px-8 flex justify-between items-center sticky top-0 z-50">
-      <h1 className="text-2xl font-bold text-blue-600">SimiPhy</h1>
+      <Link to="/" className="text-2xl font-bold text-blue-600">SimiPhy</Link>
 
       <input
         type="text"
         placeholder="Search for products..."
+        onChange={(e) => onSearchChange(e.target.value)}
         className="border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 px-4 py-2 rounded-md w-1/2"
       />
 

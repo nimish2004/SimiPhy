@@ -24,15 +24,41 @@ const Checkout = () => {
       return;
     }
 
-    // Placeholder for real payment
-    alert("Order placed successfully!");
+     const options = {
+  key: "rzp_test_LrHYwGpgIOOaN3", // replace with your test Key ID
+  amount: total * 100, // amount in paise
+  currency: "INR",
+  name: "SimiPhy Store",
+  description: "Order Payment",
+  image: "https://your-logo-url.com/logo.png", // optional
 
-    // Clear cart
+  handler: function (response) {
+    navigate("/success", {
+      state: {
+        paymentId: response.razorpay_payment_id,
+        name: form.name,
+        total,
+      },
+    });
+
     dispatch({ type: "CLEAR_CART" });
+  }, // ✅ Add comma here
 
-    // Redirect to home
-    navigate("/");
-  };
+  prefill: {
+    name: form.name,
+    email: "test@example.com",
+    contact: form.phone,
+  },
+  notes: {
+    address: form.address,
+  },
+  theme: {
+    color: "#0d6efd",
+  },
+};
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
 
   return (
     <div className="max-w-4xl mx-auto p-6">
