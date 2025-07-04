@@ -1,20 +1,212 @@
 [
   {
     "id": 1,
-    "name": "Wireless Headphones",
-    "price": 2999,
-    "image": "https://images.unsplash.com/photo-1580894908361-5f8e6d3ee2eb?w=300"
+    "name": "AuraSync Wireless Earbuds",
+    "price": 1999,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/61IJBsHm97L._SX679_.jpg"
   },
   {
     "id": 2,
-    "name": "Smart Watch",
-    "price": 4999,
-    "image": "https://images.unsplash.com/photo-1518443895914-07ecf35b3f7d?w=300"
+    "name": "CloudFit Running Shoes",
+    "price": 2499,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/71g5KkG7JmL._SY500_.jpg"
   },
   {
     "id": 3,
-    "name": "Bluetooth Speaker",
-    "price": 1999,
-    "image": "https://images.unsplash.com/photo-1606813903206-3c5f55102d2e?w=300"
+    "name": "ZenStyle Cotton T-Shirt",
+    "price": 799,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/71t-6iqNroL._SY550_.jpg"
+  },
+  {
+    "id": 4,
+    "name": "BreezeSmart Ceiling Fan",
+    "price": 2999,
+    "category": "Home Appliances",
+    "image": "https://m.media-amazon.com/images/I/61aN7vH6Y+L._SX679_.jpg"
+  },
+  {
+    "id": 5,
+    "name": "The Power of Habit - Book",
+    "price": 399,
+    "category": "Books",
+    "image": "https://m.media-amazon.com/images/I/71aG+xDKSYL.jpg"
+  },
+  {
+    "id": 6,
+    "name": "SmartFit Fitness Band",
+    "price": 1799,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/61BFR3i6GFL._SY450_.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Leather Wallet for Men",
+    "price": 899,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/91yK5F9xPpL._SX569_.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Notebook Set of 5",
+    "price": 349,
+    "category": "Stationery",
+    "image": "https://m.media-amazon.com/images/I/41i9g6uI34L.jpg"
+  },
+  {
+    "id": 9,
+    "name": "JBL Go 3 Portable Speaker",
+    "price": 2399,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/71YtZBb1hFL._SX679_.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Gaming Mouse RGB Pro",
+    "price": 1599,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/61v5Zq+z+VL._SX679_.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Elegant Bedsheet King Size",
+    "price": 999,
+    "category": "Home",
+    "image": "https://m.media-amazon.com/images/I/61bwP3HdpVL._SX569_.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Skyline Men's Denim Jacket",
+    "price": 1899,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/81mjE7tTZDL._SY550_.jpg"
+  },
+  {
+    "id": 13,
+    "name": "Noise ColorFit Smartwatch",
+    "price": 3499,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/61epn29QGZL._SX679_.jpg"
+  },
+  {
+    "id": 14,
+    "name": "TravelPro Expandable Luggage",
+    "price": 4199,
+    "category": "Travel",
+    "image": "https://m.media-amazon.com/images/I/81TkW+ZLEUL._SX569_.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Digital Kitchen Weighing Scale",
+    "price": 599,
+    "category": "Home Appliances",
+    "image": "https://m.media-amazon.com/images/I/61M6UjT0JIL._SX679_.jpg"
+  },
+  {
+    "id": 16,
+    "name": "Nike Training Shorts",
+    "price": 1299,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/51nczP10bGL._SY550_.jpg"
+  },
+  {
+    "id": 17,
+    "name": "Coconut Wood Table Lamp",
+    "price": 1199,
+    "category": "Home",
+    "image": "https://m.media-amazon.com/images/I/61wPStNk7RL._SX679_.jpg"
+  },
+  {
+    "id": 18,
+    "name": "Laptop Stand Adjustable",
+    "price": 899,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/81FEHnJXbPL._SX679_.jpg"
+  },
+  {
+    "id": 19,
+    "name": "Campus Mesh Sneakers",
+    "price": 1899,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/71nUcknK8uL._SY500_.jpg"
+  },
+  {
+    "id": 20,
+    "name": "Atomic Habits - Book",
+    "price": 399,
+    "category": "Books",
+    "image": "https://m.media-amazon.com/images/I/91bYsX41DVL.jpg"
+  },
+  {
+    "id": 21,
+    "name": "Silicone Phone Stand",
+    "price": 199,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/61sl7EVd1WL._SX679_.jpg"
+  },
+  {
+    "id": 22,
+    "name": "Bluetooth Calling Watch",
+    "price": 2699,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/71knFDuSk-L._SX679_.jpg"
+  },
+  {
+    "id": 23,
+    "name": "Creative Sketchbook A4",
+    "price": 229,
+    "category": "Stationery",
+    "image": "https://m.media-amazon.com/images/I/81duyUcRItL._SX679_.jpg"
+  },
+  {
+    "id": 24,
+    "name": "Men’s Analog Watch - Titan",
+    "price": 3299,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/71fzX-ckDuL._SX679_.jpg"
+  },
+  {
+    "id": 25,
+    "name": "Striped Cotton Bedsheet Set",
+    "price": 1149,
+    "category": "Home",
+    "image": "https://m.media-amazon.com/images/I/81pg1bN1UuL._SX679_.jpg"
+  },
+  {
+    "id": 26,
+    "name": "HP Wireless Mouse X3500",
+    "price": 749,
+    "category": "Electronics",
+    "image": "https://m.media-amazon.com/images/I/71P2kKmn4ML._SX679_.jpg"
+  },
+  {
+    "id": 27,
+    "name": "Casual Backpack (Waterproof)",
+    "price": 1399,
+    "category": "Travel",
+    "image": "https://m.media-amazon.com/images/I/71-HHDlM4HL._SX679_.jpg"
+  },
+  {
+    "id": 28,
+    "name": "Wooden Wall Clock",
+    "price": 1299,
+    "category": "Home",
+    "image": "https://m.media-amazon.com/images/I/61xqMBoq2nL._SX679_.jpg"
+  },
+  {
+    "id": 29,
+    "name": "Sketch Pens (Pack of 24)",
+    "price": 189,
+    "category": "Stationery",
+    "image": "https://m.media-amazon.com/images/I/71Jv1iT8oML._SX679_.jpg"
+  },
+  {
+    "id": 30,
+    "name": "AirMax Running Shoes Women",
+    "price": 2299,
+    "category": "Footwear",
+    "image": "https://m.media-amazon.com/images/I/61O70ZJ6JXL._SY500_.jpg"
   }
 ]

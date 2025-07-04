@@ -1,6 +1,8 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState } from "react";import { db, auth } from "../firebase";
+import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
+
 
 const Checkout = () => {
   const { cart, dispatch } = useCart();
@@ -18,47 +20,75 @@ const Checkout = () => {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleOrder = () => {
-    if (!form.name || !form.address || !form.phone) {
-      alert("Please fill all fields");
-      return;
-    }
+  const handleOrder = async () => {
+  if (!form.name || !form.address || !form.phone) {
+    alert("Please fill all fields");
+    return;
+  }
 
-     const options = {
-  key: "rzp_test_LrHYwGpgIOOaN3", // replace with your test Key ID
-  amount: total * 100, // amount in paise
-  currency: "INR",
-  name: "SimiPhy Store",
-  description: "Order Payment",
-  image: "https://your-logo-url.com/logo.png", // optional
+  const options = {
+    key: "rzp_test_LrHYwGpgIOOaN3",
+    amount: total * 100,
+    currency: "INR",
+    name: "SimiPhy Store",
+    description: "Order Payment",
+    handler: async function (response) {
+  const uid = auth.currentUser.uid;
 
-  handler: function (response) {
-    navigate("/success", {
-      state: {
-        paymentId: response.razorpay_payment_id,
-        name: form.name,
-        total,
-      },
-    });
-
-    dispatch({ type: "CLEAR_CART" });
-  }, // ✅ Add comma here
-
-  prefill: {
+  const newOrder = {
+    id: Date.now(),
+    paymentId: response.razorpay_payment_id,
     name: form.name,
-    email: "test@example.com",
-    contact: form.phone,
-  },
-  notes: {
+    phone: form.phone,
     address: form.address,
-  },
-  theme: {
-    color: "#0d6efd",
-  },
-};
+    date: new Date().toISOString(),
+    items: cart,
+    total,
+  };
+
+  // 🔧 FIX: define existingOrders properly
+  const existingOrders = JSON.parse(localStorage.getItem(`orders_${uid}`)) || [];
+  const updatedOrders = [...existingOrders, newOrder];
+  localStorage.setItem(`orders_${uid}`, JSON.stringify(updatedOrders));
+
+  // 🔐 Firestore sync (optional)
+  const userDocRef = doc(db, "orders", uid);
+  const docSnap = await getDoc(userDocRef);
+
+  if (!docSnap.exists()) {
+    await setDoc(userDocRef, { orders: [newOrder] });
+  } else {
+    await updateDoc(userDocRef, {
+      orders: arrayUnion(newOrder),
+    });
+  }
+
+  dispatch({ type: "CLEAR_CART" });
+  navigate("/success", {
+    state: {
+      paymentId: response.razorpay_payment_id,
+      name: form.name,
+      total,
+    },
+  });
+},
+    prefill: {
+      name: form.name,
+      email: "test@example.com",
+      contact: form.phone,
+    },
+    notes: {
+      address: form.address,
+    },
+    theme: {
+      color: "#0d6efd",
+    },
+  };
+
   const rzp = new window.Razorpay(options);
   rzp.open();
 };
+
 
   return (
     <div className="max-w-4xl mx-auto p-6">
