@@ -28,19 +28,22 @@ const Home = () => {
       }
     };
 
-    const fetchCategories = async () => {
-  const res = await fetch("https://dummyjson.com/products/categories");
-  const data = await res.json();
+      const fetchCategories = async () => {
+    try {
+      const res = await fetch("https://dummyjson.com/products/categories");
+      const data = await res.json();
 
-  const formatted = data.map((cat) => ({
-    name: cat,
-    slug: cat.toLowerCase().replace(/\s+/g, "-"),
-    url: `/category/${cat}`
-  }));
-
-  setCategories(formatted);
-};
-
+      // Ensure data is an array of strings
+      if (Array.isArray(data)) {
+        setCategories(data.map((cat) => cat.toLowerCase())); // Convert strings safely
+      } else {
+        console.error("Categories API did not return an array");
+      }
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
+  
     fetchProducts();
     fetchCategories();
   }, []);
@@ -57,6 +60,10 @@ const Home = () => {
       if (sortOrder === "desc") return b.price - a.price;
       return 0;
     });
+    
+    const [selectedRating, setSelectedRating] = useState(0);
+const [stockFilter, setStockFilter] = useState("all"); // 'all' | 'in' | 'out'
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -66,12 +73,18 @@ const Home = () => {
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           <Sidebar
-            categories={categories}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-          />
+  categories={categories}
+  selectedCategory={selectedCategory}
+  setSelectedCategory={setSelectedCategory}
+  sortOrder={sortOrder}
+  setSortOrder={setSortOrder}
+  selectedRating={selectedRating}
+  setSelectedRating={setSelectedRating}
+  stockFilter={stockFilter}
+  setStockFilter={setStockFilter}
+/>
+
+
 
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">

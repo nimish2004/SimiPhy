@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { dispatch } = useCart();
+  const { cart, dispatch } = useCart();
   const [product, setProduct] = useState(null);
   const [recommended, setRecommended] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,12 +72,33 @@ const ProductDetail = () => {
           <p className="text-lg text-gray-600">₹{product.price}</p>
           <p className="text-gray-700">{product.description}</p>
 
-          <button
-            onClick={addToCart}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition"
-          >
-            Add to Cart
-          </button>
+          {cart.find((item) => item.id === product.id) ? (
+  <div className="flex items-center space-x-4 mt-4">
+    <button
+      onClick={() => dispatch({ type: "DECREMENT_QUANTITY", payload: product.id })}
+      className="bg-red-500 text-white px-3 py-1 rounded-md"
+    >
+      −
+    </button>
+    <span className="font-medium">
+      {cart.find((item) => item.id === product.id)?.quantity}
+    </span>
+    <button
+      onClick={() => dispatch({ type: "INCREMENT_QUANTITY", payload: product.id })}
+      className="bg-green-500 text-white px-3 py-1 rounded-md"
+    >
+      +
+    </button>
+  </div>
+) : (
+  <button
+    onClick={addToCart}
+    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition"
+  >
+    Add to Cart
+  </button>
+)}
+
         </div>
       </div>
 

@@ -8,10 +8,10 @@ const ProductList = ({ products, view }) => {
         <div key={product.id} className={view === "list" ? "bg-white p-4 rounded-xl shadow-sm flex gap-4" : ""}>
           {view === "list" ? (
             <>
-              <img src={product.image} alt={product.name} className="w-32 h-32 object-cover rounded" />
+              <img src={product.images?.[0]} alt={product.title} className="w-32 h-32 object-cover rounded" />
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-gray-800">{product.name}</h2>
+                  <h2 className="text-lg font-bold text-gray-800">{product.title}</h2>
                   <p className="text-gray-600">₹{product.price}</p>
                 </div>
                 <button className="mt-2 self-start bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">

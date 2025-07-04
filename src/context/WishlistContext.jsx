@@ -1,58 +1,65 @@
-import { createContext, useContext, useReducer, useEffect } from "react";
+// src/context/WishlistContext.jsx
+import { createContext, useContext, useReducer, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc, setDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 const WishlistContext = createContext();
 
-const reducer = (state, action) => {
+const wishlistReducer = (state, action) => {
   switch (action.type) {
     case "SET_WISHLIST":
       return action.payload;
-
     case "ADD_TO_WISHLIST":
+      if (state.find((item) => item.id === action.payload.id)) return state;
       return [...state, action.payload];
-
     case "REMOVE_FROM_WISHLIST":
       return state.filter((item) => item.id !== action.payload);
-
     default:
       return state;
   }
 };
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlist, dispatch] = useReducer(reducer, []);
+  const [wishlist, dispatch] = useReducer(wishlistReducer, []);
+  const [user, setUser] = useState(null);
 
-  // 🔁 Fetch and listen to wishlist from Firestore
+  // Load user state
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (!user) return;
+    const unsubscribe = auth.onAuthStateChanged(async (u) => {
+      setUser(u);
 
-      const userRef = doc(db, "wishlists", user.uid);
+      if (u) {
+        const userDoc = doc(db, "wishlists", u.uid);
+        const docSnap = await getDoc(userDoc);
 
-      const unsubscribeFirestore = onSnapshot(userRef, (docSnap) => {
         if (docSnap.exists()) {
-          dispatch({ type: "SET_WISHLIST", payload: docSnap.data().items || [] });
+          const items = docSnap.data().items || [];
+          dispatch({ type: "SET_WISHLIST", payload: items });
         } else {
-          // Create empty wishlist document if it doesn't exist
-          setDoc(userRef, { items: [] });
+          await setDoc(userDoc, { items: [] });
+          dispatch({ type: "SET_WISHLIST", payload: [] });
         }
-      });
-
-      return unsubscribeFirestore;
+      } else {
+        dispatch({ type: "SET_WISHLIST", payload: [] });
+      }
     });
+
+    return () => unsubscribe();
   }, []);
 
-  // 🔁 Sync wishlist changes to Firestore
+  // Save to Firestore whenever wishlist changes
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) return;
+    const saveToFirestore = async () => {
+      if (user) {
+        const userDoc = doc(db, "wishlists", user.uid);
+        await updateDoc(userDoc, {
+          items: wishlist,
+        });
+      }
+    };
 
-    const userRef = doc(db, "wishlists", user.uid);
-    updateDoc(userRef, { items: wishlist }).catch((err) => {
-      console.error("Failed to update wishlist:", err.message);
-    });
-  }, [wishlist]);
+    saveToFirestore();
+  }, [wishlist, user]);
 
   return (
     <WishlistContext.Provider value={{ wishlist, dispatch }}>

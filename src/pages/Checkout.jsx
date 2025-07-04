@@ -1,8 +1,8 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";import { db, auth } from "../firebase";
+import { useState } from "react";
+import { db, auth } from "../firebase";
 import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
-
 
 const Checkout = () => {
   const { cart, dispatch } = useCart();
@@ -18,77 +18,84 @@ const Checkout = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // ✅ Format INR
+  const formatINR = (amount) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(amount);
+
+  // ✅ Fix total precision
+  const total = parseFloat(
+    cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
+  );
 
   const handleOrder = async () => {
-  if (!form.name || !form.address || !form.phone) {
-    alert("Please fill all fields");
-    return;
-  }
+    if (!form.name || !form.address || !form.phone) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  const options = {
-    key: "rzp_test_LrHYwGpgIOOaN3",
-    amount: total * 100,
-    currency: "INR",
-    name: "SimiPhy Store",
-    description: "Order Payment",
-    handler: async function (response) {
-  const uid = auth.currentUser.uid;
+    const options = {
+      key: "rzp_test_LrHYwGpgIOOaN3",
+      amount: total * 100,
+      currency: "INR",
+      name: "SimiPhy Store",
+      description: "Order Payment",
+      handler: async function (response) {
+        const uid = auth.currentUser.uid;
 
-  const newOrder = {
-    id: Date.now(),
-    paymentId: response.razorpay_payment_id,
-    name: form.name,
-    phone: form.phone,
-    address: form.address,
-    date: new Date().toISOString(),
-    items: cart,
-    total,
+        const newOrder = {
+          id: Date.now(),
+          paymentId: response.razorpay_payment_id,
+          name: form.name,
+          phone: form.phone,
+          address: form.address,
+          date: new Date().toISOString(),
+          items: cart,
+          total,
+        };
+
+        const existingOrders = JSON.parse(localStorage.getItem(`orders_${uid}`)) || [];
+        const updatedOrders = [...existingOrders, newOrder];
+        localStorage.setItem(`orders_${uid}`, JSON.stringify(updatedOrders));
+
+        const userDocRef = doc(db, "orders", uid);
+        const docSnap = await getDoc(userDocRef);
+
+        if (!docSnap.exists()) {
+          await setDoc(userDocRef, { orders: [newOrder] });
+        } else {
+          await updateDoc(userDocRef, {
+            orders: arrayUnion(newOrder),
+          });
+        }
+
+        dispatch({ type: "CLEAR_CART" });
+        navigate("/success", {
+          state: {
+            paymentId: response.razorpay_payment_id,
+            name: form.name,
+            total,
+          },
+        });
+      },
+      prefill: {
+        name: form.name,
+        email: "test@example.com",
+        contact: form.phone,
+      },
+      notes: {
+        address: form.address,
+      },
+      theme: {
+        color: "#0d6efd",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
-
-  // 🔧 FIX: define existingOrders properly
-  const existingOrders = JSON.parse(localStorage.getItem(`orders_${uid}`)) || [];
-  const updatedOrders = [...existingOrders, newOrder];
-  localStorage.setItem(`orders_${uid}`, JSON.stringify(updatedOrders));
-
-  // 🔐 Firestore sync (optional)
-  const userDocRef = doc(db, "orders", uid);
-  const docSnap = await getDoc(userDocRef);
-
-  if (!docSnap.exists()) {
-    await setDoc(userDocRef, { orders: [newOrder] });
-  } else {
-    await updateDoc(userDocRef, {
-      orders: arrayUnion(newOrder),
-    });
-  }
-
-  dispatch({ type: "CLEAR_CART" });
-  navigate("/success", {
-    state: {
-      paymentId: response.razorpay_payment_id,
-      name: form.name,
-      total,
-    },
-  });
-},
-    prefill: {
-      name: form.name,
-      email: "test@example.com",
-      contact: form.phone,
-    },
-    notes: {
-      address: form.address,
-    },
-    theme: {
-      color: "#0d6efd",
-    },
-  };
-
-  const rzp = new window.Razorpay(options);
-  rzp.open();
-};
-
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -125,13 +132,13 @@ const Checkout = () => {
         <h3 className="text-xl font-semibold mb-4">🛒 Order Summary</h3>
         {cart.map((item) => (
           <div key={item.id} className="flex justify-between py-2 border-b">
-            <div>{item.name} x {item.quantity}</div>
-            <div>₹{item.price * item.quantity}</div>
+            <div>{item.name} × {item.quantity}</div>
+            <div>{formatINR(item.price * item.quantity)}</div>
           </div>
         ))}
         <div className="flex justify-between font-bold mt-4 text-lg">
           <span>Total:</span>
-          <span>₹{total}</span>
+          <span>{formatINR(total)}</span>
         </div>
 
         <button

@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProductAIHelper from "./components/ProductAIHelper";
 import Checkout from "./pages/Checkout";
+import ScrollToTop from "./components/ScrollToTop";
 import Cart from "./components/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import Success from "./pages/Success";
@@ -11,12 +13,15 @@ import Profile from "./pages/Profile";
 import Sidebar from "./components/Sidebar";
 import Wishlist from "./pages/Wishlist";
 import Footer from "./components/Footer";
+import FloatingAIButton from "./components/FloatingAIButton";
 
 const App = () => {
   return (
     <Router>
        <div className="flex flex-col min-h-screen bg-gray-50">
+        <ScrollToTop />
      <Routes>
+      <Route path="/ai-helper" element={<ProductAIHelper />} />
   <Route path="/" element={<Home />} />
   <Route path="/sidebar" element={<Sidebar />} />
   
@@ -49,6 +54,7 @@ const App = () => {
     <div>
       <Footer />
       </div>
+       <FloatingAIButton />
     </Router>
     
   );
