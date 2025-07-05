@@ -1,14 +1,12 @@
 // src/pages/Wishlist.jsx
 import { useWishlist } from "../context/WishlistContext";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 
 const Wishlist = () => {
   const { wishlist, dispatch } = useWishlist();
 
   return (
     <>
-    <Navbar />
     <div className="max-w-5xl mx-auto p-6">
       
       <h2 className="text-2xl font-bold mb-6">💖 My Wishlist</h2>

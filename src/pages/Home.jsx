@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import ProductList from "../components/ProductList";
 import ToggleView from "../components/ToggleView";
 import Sidebar from "../components/Sidebar";
 import HeroSlider from "../components/HeroSlider";
 
-const Home = () => {
+const Home = ({ search }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [search, setSearch] = useState("");
   const [view, setView] = useState("grid");
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [selectedRating, setSelectedRating] = useState(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch("https://dummyjson.com/products?limit=100");
+        const res = await fetch("https://fakestoreapi.com/products");
         const data = await res.json();
-        setProducts(data.products);
+        setProducts(data);
       } catch (err) {
         console.error("Failed to load products:", err);
       } finally {
@@ -28,22 +27,16 @@ const Home = () => {
       }
     };
 
-      const fetchCategories = async () => {
-    try {
-      const res = await fetch("https://dummyjson.com/products/categories");
-      const data = await res.json();
-
-      // Ensure data is an array of strings
-      if (Array.isArray(data)) {
-        setCategories(data.map((cat) => cat.toLowerCase())); // Convert strings safely
-      } else {
-        console.error("Categories API did not return an array");
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("https://fakestoreapi.com/products/categories");
+        const data = await res.json();
+        setCategories(data); // Already in lowercase format
+      } catch (err) {
+        console.error("Error fetching categories:", err);
       }
-    } catch (err) {
-      console.error("Error fetching categories:", err);
-    }
-  };
-  
+    };
+
     fetchProducts();
     fetchCategories();
   }, []);
@@ -55,37 +48,29 @@ const Home = () => {
     .filter((product) =>
       selectedCategory ? product.category === selectedCategory : true
     )
+    .filter((product) =>
+      selectedRating > 0 ? product.rating?.rate >= selectedRating : true
+    )
     .sort((a, b) => {
       if (sortOrder === "asc") return a.price - b.price;
       if (sortOrder === "desc") return b.price - a.price;
       return 0;
     });
-    
-    const [selectedRating, setSelectedRating] = useState(0);
-const [stockFilter, setStockFilter] = useState("all"); // 'all' | 'in' | 'out'
-
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar onSearchChange={setSearch} />
-       <HeroSlider />
-
+      <HeroSlider />
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           <Sidebar
-  categories={categories}
-  selectedCategory={selectedCategory}
-  setSelectedCategory={setSelectedCategory}
-  sortOrder={sortOrder}
-  setSortOrder={setSortOrder}
-  selectedRating={selectedRating}
-  setSelectedRating={setSelectedRating}
-  stockFilter={stockFilter}
-  setStockFilter={setStockFilter}
-/>
-
-
-
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+          />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl font-bold text-gray-800">🛍️ Products</h1>
@@ -93,10 +78,13 @@ const [stockFilter, setStockFilter] = useState("all"); // 'all' | 'in' | 'out'
             </div>
 
             {loading ? (
-              <p className="text-center text-gray-500 mt-20">Loading products...</p>
-            ) : (
-              <ProductList products={filteredProducts} view={view} />
-            )}
+  <p className="text-center text-gray-500 mt-20">Loading products...</p>
+) : filteredProducts.length === 0 ? (
+  <p className="text-center text-gray-500 mt-20 text-lg">Well, this is awkward… We couldn’t find anything 😬</p>
+) : (
+  <ProductList products={filteredProducts} view={view} />
+)}
+
           </div>
         </div>
       </main>

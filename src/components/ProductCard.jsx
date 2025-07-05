@@ -33,9 +33,7 @@ const ProductCard = ({ product }) => {
     <div className="bg-white rounded-xl shadow-md hover:shadow-2xl transform transition duration-300 hover:scale-105 hover:rotate-1 p-4">
 
       <Link to={`/product/${product.id}`}>
-        <img
-          src={product.images?.[0]}
-          alt={product.title}
+        <img src={product.image} alt={product.title}
           className="w-full h-48 object-cover rounded-lg"
         />
         <h2 className="mt-2 text-lg font-bold text-gray-800">{product.title}</h2>

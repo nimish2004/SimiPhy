@@ -1,6 +1,5 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 
 const Cart = () => {
   const { cart, dispatch } = useCart();
@@ -18,7 +17,6 @@ const formattedTotal = new Intl.NumberFormat("en-IN", {
 
   return (
     <>
-      <Navbar />
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-6">🛒 Your Cart</h2>

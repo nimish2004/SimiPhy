@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import Navbar from "../components/Navbar";
 
 const Profile = () => {
   const user = auth.currentUser;
@@ -46,7 +45,6 @@ const Profile = () => {
 
   return (
     <>
-      <Navbar />
       <div className="max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 mt-8 bg-white border border-gray-200 rounded-xl shadow-md animate-fade-in">
         {/* <div className="w-full px-4 sm:px-8 py-6 mt-8 bg-white shadow rounded-md"> */}
 

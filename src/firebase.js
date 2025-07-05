@@ -9,8 +9,8 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCAM7TyuBkGOFe3XZsdJLCvwd8PFP8J5Fw",
-  authDomain: "simiphy-ead8b.firebaseapp.com",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN_KEY,
   projectId: "simiphy-ead8b",
   storageBucket: "simiphy-ead8b.firebasestorage.app",
   messagingSenderId: "83847761863",
