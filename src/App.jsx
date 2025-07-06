@@ -19,6 +19,8 @@ import FloatingAIButton from "./components/FloatingAIButton";
 import TopBar from "./components/TopBar";
 import Navbar from "./components/Navbar";
 import WelcomePopup from "./components/WelcomePopup";
+import SplashCursor from "./components/SplashCursor";
+
 
 
 
@@ -45,6 +47,7 @@ const App = () => {
     <Router>
        <div className="flex flex-col min-h-screen bg-gray-50">
         <ScrollToTop />
+        <SplashCursor />
         
         {/* ✅ GLOBAL UI ELEMENTS */}
         <Navbar onSearchChange={setSearchQuery} />
