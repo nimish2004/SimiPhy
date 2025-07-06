@@ -1,5 +1,5 @@
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable"; // ✅ Correct named import
 
 export const generateInvoice = (order) => {
   const doc = new jsPDF();
@@ -25,19 +25,19 @@ export const generateInvoice = (order) => {
   // 4. Prepare Table Data
   const tableBody = order.items.map((item, index) => [
     index + 1,
-    item.title || item.name,
+    item.title || item.name || "Unnamed",
     item.quantity,
     `₹${item.price}`,
     `₹${item.price * item.quantity}`,
   ]);
 
-  // 5. Generate Table
-  doc.autoTable({
+  // 5. Generate Table with autoTable
+  autoTable(doc, {
     startY: 75,
     head: [["#", "Product", "Qty", "Unit Price", "Total"]],
     body: tableBody,
     styles: { fontSize: 10 },
-    headStyles: { fillColor: [52, 152, 219] }, // Blue header
+    headStyles: { fillColor: [52, 152, 219] },
     columnStyles: {
       0: { halign: "center", cellWidth: 10 },
       1: { cellWidth: 80 },
@@ -48,16 +48,17 @@ export const generateInvoice = (order) => {
   });
 
   // 6. Grand Total
-  const finalY = doc.autoTable.previous.finalY + 10;
+  const finalY = doc.lastAutoTable?.finalY || 90; // fallback to safe Y
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
-  doc.text(`Grand Total: ₹${order.total}`, 14, finalY);
+  doc.text(`Grand Total: ₹${order.total}`, 14, finalY + 10);
 
   // 7. Footer
   doc.setFont("helvetica", "italic");
   doc.setFontSize(10);
   doc.text("Thank you for shopping with SimiPhy 💜", 105, 285, { align: "center" });
 
-  // 8. Save the PDF
+  // 8. Save PDF
   doc.save(`Invoice_${order.id}.pdf`);
 };
+

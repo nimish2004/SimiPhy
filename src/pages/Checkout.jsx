@@ -132,7 +132,7 @@ const Checkout = () => {
         <h3 className="text-xl font-semibold mb-4">🛒 Order Summary</h3>
         {cart.map((item) => (
           <div key={item.id} className="flex justify-between py-2 border-b">
-            <div>{item.name} × {item.quantity}</div>
+            <div>{item.name || item.title} × {item.quantity}</div>
             <div>{formatINR(item.price * item.quantity)}</div>
           </div>
         ))}

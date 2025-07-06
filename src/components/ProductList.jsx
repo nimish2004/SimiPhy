@@ -52,11 +52,12 @@ const ProductList = ({ products, view }) => {
               {isWishlisted(product) ? "❤️" : "🤍"}
             </button>
 
-            <img
-              src={product.thumbnail}
-              alt={product.title}
-              className="w-32 h-32 object-cover rounded"
-            />
+           <img
+  src={product.image}
+  alt={product.title}
+  className="w-32 h-32 object-cover rounded"
+/>
+
             <div className="flex-1 flex flex-col justify-between">
               <div>
                 <h2 className="text-lg font-bold text-gray-800">

@@ -36,7 +36,7 @@ const App = () => {
         const name = user.email?.split("@")[0] || "Friend";
         setUserName(name);
         setShowWelcome(true);
-        setTimeout(() => setShowWelcome(false), 4000);
+        setTimeout(() => setShowWelcome(false), 2000);
       }
     });
 
