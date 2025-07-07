@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import { useWishlist } from "../context/WishlistContext";
+import { useCart } from "../context/CartContext";
 
 const ProductList = ({ products, view }) => {
   const { wishlist, dispatch: wishlistDispatch } = useWishlist();
+  const { cart, dispatch: cartDispatch } = useCart();
 
   const toggleWishlist = (e, product) => {
     e.preventDefault();
@@ -19,6 +21,11 @@ const ProductList = ({ products, view }) => {
 
   const isWishlisted = (product) =>
     wishlist.some((item) => item.id === product.id);
+
+  const getQuantity = (id) => {
+    const found = cart.find((item) => item.id === id);
+    return found ? found.quantity : 0;
+  };
 
   return (
     <div
@@ -52,11 +59,11 @@ const ProductList = ({ products, view }) => {
               {isWishlisted(product) ? "❤️" : "🤍"}
             </button>
 
-           <img
-  src={product.image}
-  alt={product.title}
-  className="w-32 h-32 object-cover rounded"
-/>
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-32 h-32 object-cover rounded"
+            />
 
             <div className="flex-1 flex flex-col justify-between">
               <div>
@@ -65,15 +72,51 @@ const ProductList = ({ products, view }) => {
                 </h2>
                 <p className="text-gray-600">₹{product.price}</p>
               </div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Add to cart logic here
-                }}
-                className="mt-2 self-start bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-              >
-                Add to Cart
-              </button>
+
+              {getQuantity(product.id) === 0 ? (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cartDispatch({ type: "ADD_TO_CART", payload: product });
+                  }}
+                  className="mt-2 self-start bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                >
+                  Add to Cart
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      cartDispatch({
+                        type: "DECREMENT_QUANTITY",
+                        payload: product.id,
+                      });
+                    }}
+                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    −
+                  </button>
+                  <span className="font-semibold">
+                    {getQuantity(product.id)}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      cartDispatch({
+                        type: "INCREMENT_QUANTITY",
+                        payload: product.id,
+                      });
+                    }}
+                    className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
             </div>
           </Link>
         ) : (
